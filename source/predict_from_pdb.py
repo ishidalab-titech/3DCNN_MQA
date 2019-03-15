@@ -1,6 +1,5 @@
 import chainer
 import chainer.functions as F
-import chainer.links as L
 import numpy as np
 import json
 import argparse
@@ -9,7 +8,7 @@ from chainer.sequential import Sequential
 from chainer.serializers import load_npz
 from chainer import Variable
 from functools import partial
-from preprocessing.make_voxel import get_voxel
+from make_voxel import get_voxel
 
 
 def hinted_tuple_hook(obj):
