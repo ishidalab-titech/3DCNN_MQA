@@ -69,8 +69,14 @@ def make_voxel(input_mol, buffer, width):
     return output
 
 
-def get_voxel(input_path, target_path, buffer, width):
+def get_voxel(input_path, buffer, width):
+    input_mol = parsePDB(input_path)
+    occus = make_voxel(input_mol=input_mol, buffer=buffer, width=width)
+    return occus, input_mol.select('name CA').getResnames(), input_mol.select('name CA').getResnums()
+
+
+def get_voxel_fasta(input_path, target_path, buffer, width):
     input_mol, _, _ = align_fasta(input_pdb_path=input_path, target_fasta_path=target_path)
     if input_mol is not None:
         occus = make_voxel(input_mol=input_mol, buffer=buffer, width=width)
-        return occus, input_mol.select('name CA').getResNames(), input_mol.select('name CA').getResnums()
+        return occus, input_mol.select('name CA').getResnames(), input_mol.select('name CA').getResnums()

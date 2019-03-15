@@ -1,14 +1,16 @@
 import chainer
 import chainer.functions as F
+import chainer.links as L
 import numpy as np
 import json
 import argparse
+import copy
 from chainer.function import no_backprop_mode
 from chainer.sequential import Sequential
 from chainer.serializers import load_npz
 from chainer import Variable
 from functools import partial
-from make_voxel import get_voxel
+from make_voxel import get_voxel, get_voxel_fasta
 
 
 def hinted_tuple_hook(obj):
@@ -20,17 +22,23 @@ def hinted_tuple_hook(obj):
 
 def get_model(config):
     model = Sequential()
+    W = chainer.initializers.HeNormal(1 / np.sqrt(1 / 2), dtype=np.float32)
+    bias = chainer.initializers.Zero(dtype=np.float32)
     layers = config['model']
     for layer in layers:
         name = layer['name']
-        parameter = layer['parameter']
+        parameter = copy.deepcopy(layer['parameter'])
         if name[0] == 'L':
+            if 'Conv' in name or 'Linear' in name:
+                parameter.update({'initialW': W, 'initial_bias': bias})
             add_layer = eval(name)(**parameter)
         elif name[0] == 'F':
             if len(parameter) == 0:
                 add_layer = partial(eval(name))
             else:
                 add_layer = partial(eval(name), **parameter)
+        elif name[0] == 'M':
+            add_layer = L.BatchNormalization(size=parameter['size'])
         model.append(add_layer)
     return model
 
@@ -58,7 +66,7 @@ if __name__ == '__main__':
     parser.add_argument('--gpu', '-g', type=int, default=-1,
                         help='GPU ID (negative value indicates CPU)')
     parser.add_argument('--input_path', '-i', help='Input data path')
-    parser.add_argument('--reference_fasta_path', '-r', help='Reference FASTA Sequence path')
+    parser.add_argument('--fasta_path', '-r', help='Reference FASTA Sequence path')
     parser.add_argument('--model_path', '-m', help='Pre-trained model path')
     args = parser.parse_args()
     model = get_model(json.load(open('./config.json', 'r'), object_hook=hinted_tuple_hook))
@@ -67,8 +75,11 @@ if __name__ == '__main__':
         chainer.backends.cuda.get_device_from_id(args.gpu).use()
         model.to_gpu()  # Copy the model to the GPU
 
-    data, resname, resid = get_voxel(input_path=args.input_path, target_path=args.reference_fasta_path,
-                                     buffer=28, width=1)
+    if args.fasta_path:
+        data, resname, resid = get_voxel_fasta(input_path=args.input_path, target_path=args.fasta_path,
+                                               buffer=28, width=1)
+    else:
+        data, resname, resid = get_voxel(input_path=args.input_path, buffer=28, width=1)
     predict_value = get_predict_value(data=data, model=model, gpu=args.gpu)
 
     print('Input Data Path : {}'.format(args.input_path))
