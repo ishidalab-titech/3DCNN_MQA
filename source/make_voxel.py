@@ -71,6 +71,7 @@ def make_voxel(input_mol, buffer, width):
 
 def get_voxel(input_path, buffer, width):
     input_mol = parsePDB(input_path)
+    input_mol = input_mol.select('element C or element N or element O or element S')
     occus = make_voxel(input_mol=input_mol, buffer=buffer, width=width)
     return occus, input_mol.select('name CA').getResnames(), input_mol.select('name CA').getResnums()
 

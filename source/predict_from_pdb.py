@@ -81,9 +81,8 @@ if __name__ == '__main__':
     else:
         data, resname, resid = get_voxel(input_path=args.input_path, buffer=28, width=1)
     predict_value = get_predict_value(data=data, model=model, gpu=args.gpu)
-
     print('Input Data Path : {}'.format(args.input_path))
-    print('Model Quality Score : {}'.format(np.mean(predict_value)))
+    print('Model Quality Score : {:.5f}'.format(np.mean(predict_value)))
     print('Resid\tResname\tScore')
     for i in range(len(resname)):
         print('{}\t{}\t{:.5f}'.format(resid[i], resname[i], predict_value[i]))

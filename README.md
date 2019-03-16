@@ -5,13 +5,19 @@
 - Chainer==5.2.0
 - Prody==1.10.8
 - Biopython==1.72
-
+- Emboss[1]
+- Scwrl4[2]
 ## Preparation
-Download pre-trained model from [here](http://www.cb.cs.titech.ac.jp/~sato/bmc2018/pretrained_model.npz).
 
+- Download pre-trained model from [here](http://www.cb.cs.titech.ac.jp/~sato/bmc2018/pretrained_model.npz).
+- export PATH to emboss package to use needle
 ## Usage
 ```bash
 cd your_download_directory/source
+
+# Side chain optimization before prediction
+Scwrl -i ../sample/T0759_sample.pdb -o ../sample/T0759_sample.pdb
+
 
 # Predict Model Quality Score from PDB (using GPU)
 python predict_from_pdb.py -i ../sample/T0759_sample.pdb -m pre-trained_model_path -g 0
@@ -37,5 +43,12 @@ Resid	Resname	Score
 ...
 ```
 
+
+## Reference
+[1] : EMBOSS: The European Molecular Biology Open Software Suite (2000) 
+Rice,P. Longden,I. and Bleasby,A. 
+Trends in Genetics 16, (6) pp276--277
+
+[2] : G. G. Krivov, M. V. Shapovalov, and R. L. Dunbrack, Jr. Improved prediction of protein side-chain conformations with SCWRL4. Proteins (2009).
 
 
