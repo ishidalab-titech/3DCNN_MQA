@@ -9,7 +9,7 @@
 - Scwrl4[2]
 ## Preparation
 
-- Download pre-trained model from [here](http://www.cb.cs.titech.ac.jp/~sato/bmc2018/pretrained_model.npz).
+- Download pre-trained model from [here](http://www.cb.cs.titech.ac.jp/~sato/3dcnn_data/pretrained_model.npz).
 - export PATH to emboss package to use needle
 ## Usage
 ```bash
