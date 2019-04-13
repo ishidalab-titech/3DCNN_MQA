@@ -23,15 +23,3 @@ def get_axis(CA_coord, C_coord, N_coord):
     vec_ac, vec_an, vec_ab = GS(np.array([vec_ac, vec_an, vec_ab]))
     axis = np.array([vec_ac, vec_an, vec_ab])
     return axis
-
-
-if __name__ == "__main__":
-    a = [0, 0, 1]
-    o = [1, 0, 0]
-    n = [1, 1, 0]
-    x, y, z = (get_axis(a, o, n))
-
-    print(x)
-    print(y)
-    print(z)
-    print(get_axis(a, o, n))

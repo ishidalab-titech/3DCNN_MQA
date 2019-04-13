@@ -45,10 +45,8 @@ Resid	Resname	Score
 
 
 ## Reference
-[1] : EMBOSS: The European Molecular Biology Open Software Suite (2000) 
-Rice,P. Longden,I. and Bleasby,A. 
-Trends in Genetics 16, (6) pp276--277
+[1] : P. Rice, I. Longden, and A. Bleasby EMBOSS: The European Molecular Biology Open Software Suite  Trends in Genetics 16, (6) pp276--277 (2000)
 
-[2] : G. G. Krivov, M. V. Shapovalov, and R. L. Dunbrack, Jr. Improved prediction of protein side-chain conformations with SCWRL4. Proteins (2009).
+[2] : G. G. Krivov, M. V. Shapovalov, and R. L. Dunbrack, Jr. Improved prediction of protein side-chain conformations with SCWRL4. Proteins (2009)
 
 
