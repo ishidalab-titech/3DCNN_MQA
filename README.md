@@ -31,15 +31,15 @@ python predict_from_pdb.py -i ../sample/T0759_sample.pdb -r ../sample/T0759.fast
 ```
 ## Sample Output
 ```text
-Needleman-Wunsch global alignment of two sequences
-Input Data Path : /gs/hs0/tga-ishidalab/sato/dataset/test_set_not_H/pdb_style/casp11/stage_1/T0759/T0759TS022_2.pdb
-Model Quality Score : 0.2598034739494324
+Input Data Path : ../sample/T0759_sample.pdb
+Model Quality Score : 0.25980
 Resid	Resname	Score
 13	VAL	0.18779
 14	ILE	0.37449
 15	HIS	0.18374
 16	PRO	0.41228
 17	ASP	0.29165
+18	PRO	0.34466
 ...
 ```
 
