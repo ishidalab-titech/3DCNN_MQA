@@ -32,26 +32,19 @@ def align_fasta(input_pdb_path, target_fasta_path):
         return align_pdb, input_align_indices, target_align_indices
 
 
-def calc_occupancy_bool(atom_coord, channel, axis, buffer, width):
+def calc_occupancy_bool(atom_coord, channel, buffer, width, axis):
+    atom_coord = np.dot(atom_coord, np.linalg.inv(axis))
+    atom_coord += np.array([buffer // 2, buffer // 2, buffer // 2])
+    index = np.where(np.all(atom_coord >= 0, 1) * np.all(atom_coord < buffer, 1))
+    atom_coord = (atom_coord / width).astype(np.int)
+    atom_coord, channel = atom_coord[index], channel[index]
     length = int(buffer / width)
     occus = np.zeros([length, length, length, channel.shape[1]])
     for i in range(len(atom_coord)):
         h = channel[i]
-        box_coord = coord_to_box_coord(atom_coord=atom_coord[i], axis=axis, buffer=buffer, width=width)
-        if box_coord is not None:
-            occus[box_coord[0]][box_coord[1]][box_coord[2]] = h
+        occus[atom_coord[i][0]][atom_coord[i][1]][atom_coord[i][2]] = h
     occus = occus.transpose([3, 0, 1, 2])
     return occus
-
-
-def coord_to_box_coord(atom_coord, axis, buffer, width):
-    X = np.dot(np.linalg.inv(axis.T), atom_coord)
-    X += np.array([int(buffer / 2), int(buffer / 2), int(buffer / 2)])
-    X.astype(int)
-    if 0 <= X[0] < buffer and 0 <= X[1] < buffer and 0 <= X[2] < buffer:
-        return (X / width).astype(int)
-    else:
-        return None
 
 
 def make_voxel(input_mol, buffer, width):
@@ -63,7 +56,7 @@ def make_voxel(input_mol, buffer, width):
     for ca_coord, c_coord, n_coord in zip(CA_list, C_list, N_list):
         axis = get_axis(CA_coord=ca_coord, N_coord=n_coord, C_coord=c_coord)
         atom = atom_coord - ca_coord
-        occus = calc_occupancy_bool(atom_coord=atom, channel=channel, axis=axis, buffer=buffer, width=width)
+        occus = calc_occupancy_bool(atom_coord=atom, channel=channel, buffer=buffer, width=width, axis=axis)
         output.append(occus)
     output = np.array(output, dtype=bool)
     return output
