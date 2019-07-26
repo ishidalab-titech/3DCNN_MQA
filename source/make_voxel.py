@@ -29,6 +29,7 @@ def align_fasta(input_pdb_path, target_fasta_path):
         input_align_indices = np.where(target_seq != '-')[0]
         target_align_indices = np.where(input_seq != '-')[0]
         align_pdb = pdb.select('resindex ' + reduce(lambda a, b: str(a) + ' ' + str(b), input_align_indices))
+        input_mol = input_mol.select('element C or element N or element O or element S')
         return align_pdb, input_align_indices, target_align_indices
 
 
